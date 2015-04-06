@@ -170,6 +170,35 @@ namespace Demo.MVC.CustomerService {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="MyEmail", Namespace="http://schemas.datacontract.org/2004/07/Demo.EmailSender")]
+    [System.SerializableAttribute()]
+    public partial class MyEmail : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="CustomerService.ICustomerService")]
     public interface ICustomerService {
@@ -260,12 +289,12 @@ namespace Demo.MVC.CustomerService {
         public Demo.MVC.CustomerService.Customer_ customer;
         
         [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://tempuri.org/", Order=1)]
-        public Demo.EmailSender.MyEmail myEmail;
+        public Demo.MVC.CustomerService.MyEmail myEmail;
         
         public addCustomerWithEmailRequest() {
         }
         
-        public addCustomerWithEmailRequest(Demo.MVC.CustomerService.Customer_ customer, Demo.EmailSender.MyEmail myEmail) {
+        public addCustomerWithEmailRequest(Demo.MVC.CustomerService.Customer_ customer, Demo.MVC.CustomerService.MyEmail myEmail) {
             this.customer = customer;
             this.myEmail = myEmail;
         }
@@ -412,7 +441,7 @@ namespace Demo.MVC.CustomerService {
             return base.Channel.addCustomerWithEmail(request);
         }
         
-        public bool addCustomerWithEmail(Demo.MVC.CustomerService.Customer_ customer, Demo.EmailSender.MyEmail myEmail, out string errMsg) {
+        public bool addCustomerWithEmail(Demo.MVC.CustomerService.Customer_ customer, Demo.MVC.CustomerService.MyEmail myEmail, out string errMsg) {
             Demo.MVC.CustomerService.addCustomerWithEmailRequest inValue = new Demo.MVC.CustomerService.addCustomerWithEmailRequest();
             inValue.customer = customer;
             inValue.myEmail = myEmail;

@@ -17,11 +17,11 @@ namespace Demo.MVC.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-        CustomerServiceClient client = new CustomerServiceClient ();
-        List<Customer_> customers = client.getCustomers().ToList<Customer_>();
+            CustomerServiceClient client = new CustomerServiceClient();
+            List<Customer_> customers = client.getCustomers().ToList<Customer_>();
             return View(customers);
         }
-/*
+
         // GET: Customers/Details/5
         public ActionResult Details(int? id)
         {
@@ -29,7 +29,7 @@ namespace Demo.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
+            Customer_ customer = new CustomerServiceClient().getCustomer(id.Value );
             if (customer == null)
             {
                 return HttpNotFound();
@@ -43,20 +43,23 @@ namespace Demo.MVC.Controllers
             return View();
         }
 
-        // POST: Customers/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: Customers/Create
+        //To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Name,Surname,DateOfBirth,CreditLimit,Balance,ContactNo,EmailAddress")] Customer customer)
+        public ActionResult Create([Bind(Include = "ID,Name,Surname,DateOfBirth,CreditLimit,Balance,ContactNo,EmailAddress")] Customer_ customer)
         {
+            string errMsg="";
             if (ModelState.IsValid)
-            {
-                db.Customers.Add(customer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+            {               
+                if (new CustomerServiceClient().AddCustomer(customer, out errMsg))
+                {
+                    return RedirectToAction("Index");
+                }
             }
-
+            //handle  error message
+            ModelState.AddModelError("Error", errMsg);
             return View(customer);
         }
 
@@ -67,7 +70,7 @@ namespace Demo.MVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
+            Customer_ customer = new CustomerServiceClient().getCustomer(id.Value);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -75,30 +78,34 @@ namespace Demo.MVC.Controllers
             return View(customer);
         }
 
-        // POST: Customers/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //POST: Customers/Edit/5
+        //To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        //more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Name,Surname,DateOfBirth,CreditLimit,Balance,ContactNo,EmailAddress")] Customer customer)
+        public ActionResult Edit([Bind(Include = "ID,Name,Surname,DateOfBirth,CreditLimit,Balance,ContactNo,EmailAddress")] Customer_ customer)
         {
+            string errMsg="";
             if (ModelState.IsValid)
             {
-                db.Entry(customer).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (new CustomerServiceClient().UpdateCustomer(customer, out errMsg))
+                {
+                    return RedirectToAction("Index");
+                }
             }
+            //handle  error message
+            ModelState.AddModelError("Error", errMsg);
             return View(customer);
         }
 
-        // GET: Customers/Delete/5
+        //GET: Customers/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = db.Customers.Find(id);
+            Customer_ customer = new CustomerServiceClient().getCustomer(id.Value);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -111,21 +118,27 @@ namespace Demo.MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Customer customer = db.Customers.Find(id);
-            db.Customers.Remove(customer);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            string errMsg;
+             CustomerServiceClient client = new CustomerServiceClient();
+            Customer_ customer = client.getCustomer(id);
+            if (client.DeleteCustomer(customer, out errMsg))
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(customer);
+            }
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+              
             }
             base.Dispose(disposing);
         }
- * 
- * */
+
     }
 }

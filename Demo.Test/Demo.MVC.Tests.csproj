@@ -67,10 +67,6 @@
       <Project>{c06c02d5-d31d-4b8f-847d-2f71df409b73}</Project>
       <Name>Demo.MVC</Name>
     </ProjectReference>
-    <ProjectReference Include="..\MyEmailSender\Demo.EmailSender.csproj">
-      <Project>{d206e7f9-4614-45c6-a05e-6078c02db5b9}</Project>
-      <Name>Demo.EmailSender</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
